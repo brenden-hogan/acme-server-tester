@@ -1,0 +1,13 @@
+[package]
+name = "acme-server-tester"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+instant-acme = "0.7"
+anyhow = "1.0.66"
+base64 = "0.22"
+serde_json = "1.0.78"
+clap = { version = "4.0.29", features = ["derive"] }
+rustls = { version = "0.23", default-features = false }
+tokio = { version = "1.22.0", features = ["macros", "rt", "rt-multi-thread", "time"] }
