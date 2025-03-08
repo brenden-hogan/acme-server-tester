@@ -1,7 +1,9 @@
 [package]
 name = "acme-server-tester"
+description = "A simple CLI for testing registering an account with an ACME server per RFC8555"
 version = "0.1.0"
 edition = "2021"
+repository = "https://github.com/brenden-hogan/acme-server-tester"
 
 [dependencies]
 instant-acme = { version = "0.7", features = ["aws-lc-rs"] }
@@ -11,3 +13,8 @@ serde_json = "1.0.78"
 clap = { version = "4.0.29", features = ["derive"] }
 rustls = { version = "0.23", default-features = false }
 tokio = { version = "1.22.0", features = ["macros", "rt", "rt-multi-thread", "time"] }
+
+# The profile that 'dist' will build with
+[profile.dist]
+inherits = "release"
+lto = "thin"
