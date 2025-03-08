@@ -1,31 +1,34 @@
 use base64::{prelude::BASE64_URL_SAFE_NO_PAD, Engine};
 use clap::Parser;
 
-use instant_acme::{
-    Account,NewAccount,ExternalAccountKey
-};
+use instant_acme::{Account, ExternalAccountKey, NewAccount};
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     let opts = Options::parse();
 
-    // Create a new account. This will generate a fresh ECDSA key for you.
+    // Set default crypto provider for rustls as aws-lc-rs
+    // https://docs.rs/rustls/latest/rustls/index.html#crate-features
+    rustls::crypto::aws_lc_rs::default_provider()
+        .install_default()
+        .unwrap();
 
     let eab: Option<ExternalAccountKey> = match (opts.hmac_key_id, opts.hmac_key) {
         (Some(hmac_key_id), Some(hmac_key)) => {
             let hmac_key_decoded = BASE64_URL_SAFE_NO_PAD.decode(hmac_key).unwrap();
             Some(ExternalAccountKey::new(hmac_key_id, &hmac_key_decoded))
-        },
-        (_,_) => None
+        }
+        (_, _) => None,
     };
 
     println!("EAB is set: {}", eab.is_some());
 
     let contact: &[&str] = match &opts.email {
         Some(email) => &[email],
-        None => &[]
+        None => &[],
     };
 
+    // Create a new account. This will generate a fresh ECDSA key for you.
     let (_account, credentials) = Account::create(
         &NewAccount {
             contact: contact,
@@ -41,7 +44,7 @@ async fn main() -> anyhow::Result<()> {
         "account credentials:\n\n{}",
         serde_json::to_string_pretty(&credentials).unwrap()
     );
-Ok(())
+    Ok(())
 }
 
 #[derive(Parser)]

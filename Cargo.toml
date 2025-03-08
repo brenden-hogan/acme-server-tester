@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-instant-acme = "0.7"
+instant-acme = { version = "0.7", features = ["aws-lc-rs"] }
 anyhow = "1.0.66"
 base64 = "0.22"
 serde_json = "1.0.78"

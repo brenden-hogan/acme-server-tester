@@ -35,6 +35,8 @@ With EAB
 ./target/release/acme-server-tester --server https://acme-staging-v02.api.letsencrypt.org/directory --email mailto:<your_email> --hmac-key-id 1 --hmac-key EFABBBAB
 ```
 
+Note: `hmac-key` is the Base64 URL Encoded Key.
+
 Without EAB:
 ```
 ./target/release/acme-server-tester --server https://acme-staging-v02.api.letsencrypt.org/directory --email mailto:<your_email>
